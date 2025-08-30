@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+.env/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs & editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Byte-compiled
+*.log
+*.pot
+*.mo
+
+# Database
+*.sqlite3
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# FastAPI specific
+*.db
+*.pid
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
