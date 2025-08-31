@@ -22,7 +22,7 @@ class Habit(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String, nullable=True)
-    start_date = Column(Date)   # ✅ Must match schemas.py
+    start_date = Column(Date)
     frequency = Column(Enum(FrequencyEnum))
     category_id = Column(Integer, ForeignKey("categories.id"))
 
