@@ -8,6 +8,7 @@ from fastapi import HTTPException
 
 
 # Category
+# Create Category
 def create_category(db: Session, category: schemas.CategoryCreate):
     db_category = models.Category(name=category.name)
     db.add(db_category)
@@ -15,10 +16,12 @@ def create_category(db: Session, category: schemas.CategoryCreate):
     db.refresh(db_category)
     return db_category
 
+# List Categories
 def get_categories(db: Session):
     return db.query(models.Category).all()
 
 # Habits
+# Create Habit
 def create_habit(db: Session, habit: schemas.HabitCreate):
     db_habit = models.Habit(**habit.dict())
     db.add(db_habit)
@@ -26,12 +29,15 @@ def create_habit(db: Session, habit: schemas.HabitCreate):
     db.refresh(db_habit)
     return db_habit
 
+# List Habits
 def get_habits(db: Session, skip=0, limit=10):
     return db.query(models.Habit).offset(skip).limit(limit).all()
 
+# Get Habit
 def get_habit(db: Session, habit_id: int):
     return db.query(models.Habit).filter(models.Habit.id == habit_id).first()
 
+# Delete Habit
 def delete_habit(db: Session, habit_id: int):
     habit = get_habit(db, habit_id)
     if habit:
@@ -40,8 +46,8 @@ def delete_habit(db: Session, habit_id: int):
     return habit
 
 # Completions
+# Mark Habit Completion
 def mark_completion(db: Session, completion: schemas.HabitCompletionCreate):
-    # Check if habit exists before inserting
     habit = db.query(models.Habit).filter(models.Habit.id == completion.habit_id).first()
     if not habit:
         raise HTTPException(status_code=400, detail="Habit does not exist")
@@ -56,7 +62,7 @@ def mark_completion(db: Session, completion: schemas.HabitCompletionCreate):
     db.refresh(db_completion)
     return db_completion
 
-
+# Get Habit Analytics
 def get_habit_analytics(db: Session, habit_id: int, start: date, end: date):
     return {
         "habit_id": habit_id,
@@ -65,6 +71,7 @@ def get_habit_analytics(db: Session, habit_id: int, start: date, end: date):
         "completion_percentage": streaks.completion_percentage(db, habit_id, start, end)
     }
 
+# Get Top 3 Habits
 def top_3_habits(db: Session, start: date, end: date):
     results = []
     habits = db.query(models.Habit).all()
@@ -73,12 +80,14 @@ def top_3_habits(db: Session, start: date, end: date):
         results.append({"habit_id": habit.id, "title": habit.title, "completion_rate": percent})
     return sorted(results, key=lambda x: x["completion_rate"], reverse=True)[:3]
 
+# Search Habits
 def search_habits(db: Session, keyword: str) -> List[models.Habit]:
     return db.query(models.Habit).filter(
         (models.Habit.title.ilike(f"%{keyword}%")) |
         (models.Habit.description.ilike(f"%{keyword}%"))
     ).all()
 
+# Filter Habits
 def filter_habits(
     db: Session,
     category_id: Optional[int] = None,

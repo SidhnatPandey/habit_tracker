@@ -2,6 +2,7 @@ from datetime import date, timedelta
 from sqlalchemy.orm  import Session
 from .. import models
 
+
 def current_streak(db: Session, habit_id: int) -> int:
     completions = (
         db.query(models.HabitCompletion).filter(models.HabitCompletion.habit_id == habit_id, models.HabitCompletion.status == True)
